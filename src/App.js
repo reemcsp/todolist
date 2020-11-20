@@ -1,26 +1,54 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Input, Typography, Button, List } from 'antd';
+import Todo from './components/Todo.jsx'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+
+const { Title } = Typography;
+const {  Paragraph } = Typography;
+
+
+class App extends React.Component {
+  constructor(props) {
+    super(props) ;
+    this.state = {
+      userInput: '',
+      todos: [],
+    };
+  }
+
+  render() {
+
+    return (
+      <div>
+        <Title level={1}>Todos</Title>
+        <div style={{display: 'flex', justifyContent:'row'}}>
+        <Input
+          placeholder='What needs to be done?'
+          onChange={e => {
+            this.setState({userInput: e.target.value})
+          }}
+        />
+        <Button
+         type='primary'
+         onClick={() => {
+          this.setState({todos: [...this.state.todos, this.state.userInput]})
+         }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          Add Todo
+        </Button>
+        </div>
+        <List
+          bordered
+          dataSource={this.state.todos}
+          renderItem={todo => (
+            <List.Item>
+              <Todo content={todo} onRemove={content => this.setState({todos: this.state.todos.filter(todo => todo !== content)})} />
+            </List.Item>
+          )}
+        />
+      </div>
+    )
+  }
 }
 
 export default App;
